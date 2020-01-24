@@ -2,7 +2,7 @@
 
 include("../config.php");
 
-$sql = "SELECT a.* FROM alert a where a.expiry_date >= CURDATE() order by alert_id desc";
+$sql = "SELECT a.*,coalesce(a.alert_date_from,a.create_date) as sort_date FROM alert a where a.expiry_date >= CURDATE() order by coalesce(a.alert_date_from,a.create_date) desc";
 $sql_result = mysql_query ($sql, $connection ) or die ('request "Could not execute SQL query" '.$sql);
 
 $sql_resulkts_arr = array();
