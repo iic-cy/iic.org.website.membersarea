@@ -55,7 +55,7 @@ function transformJsonData($jsonData) {
     foreach ($data as $result) {
          if (isset($result['excerpt']['rendered'])) {
             $alertExcerpt = html_entity_decode($result['excerpt']['rendered'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
-             $alertExcerpt = strip_tags($alertExcerpt); // Remove all HTML tags including <p>
+            $alertExcerpt = strip_tags($alertExcerpt); // Remove all HTML tags including <p>
             $alertExcerpt = str_replace('Διαβάστε Περισσότερα', '', $alertExcerpt);
             $alertExcerpt = trim($alertExcerpt); // Remove any trailing whitespace
         }
@@ -81,6 +81,7 @@ function transformJsonData($jsonData) {
             'alert_excerpt' => $alertExcerpt,
             'alert_link_url' => $result['link'] ?? null,
             'alert_date' => $result['date'] ?? null,
+            'alert_event_date' => $result['acf']['event_date'] ?? null,
             'alert_passed' => $alertPassed
         ];
         
