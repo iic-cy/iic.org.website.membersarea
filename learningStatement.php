@@ -19,7 +19,9 @@ $error = '';
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="css/main.css">
+        <!--link rel="stylesheet" href="css/main.css"-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <script src="js/jquery-1.8.2.min.js"></script>
@@ -27,17 +29,22 @@ $error = '';
         <script src="js/main.js"></script>
     </head>
     <body>
-
+    <div class="container text-center">
 <?php if(isset($_SESSION['user_info']) && is_array($_SESSION['user_info'])) { 
     $date = new DateTime('now', new DateTimeZone('Europe/Athens'));
     $query = "SELECT s.student_id, s.student_earned_hours, s.lesson_description, s.lecture_title, DATE_FORMAT(s.lecture_date2, '%d-%m-%Y')  as lecture_date FROM learning_statement s where s.student_id=".mysql_real_escape_string($_SESSION['user_info']['student_id'])." order by s.lecture_date desc";
-    echo '<table id="tblLearningStatement"> 
-      <caption><b>Ασφαλιστικό Ινστιτούτο Κύπρου</b><br/>Εκπαιδευτική Κατάσταση - Learning Statement<br/>'. $_SESSION['user_info']['name'] .'<br /> <a href="index.php?ac=logout" style="color:#3ec038">Αποσύνδεση</a> </caption>
+    
+    echo '<caption><h5>Ασφαλιστικό Ινστιτούτο Κύπρου</h5><h5>Εκπαιδευτική Κατάσταση - Learning Statement</h5><h2>'. $_SESSION['user_info']['name'] .'</h2> <a href="index.php?ac=logout" style="color:#3ec038">Αποσύνδεση</a> </caption>';
+    
+    echo '<table id="tblLearningStatement" class="table table-striped"> 
+      <thead>
       <tr> 
           <th> Ημερομηνία </th> 
           <th> Σεμινάριο/Πρόγραμμα </th> 
           <th> Ωρες </th> 
-      </tr><tbody>';
+      </tr>
+      </thead>
+      <tbody>';
     $totalHours = 0;
     if ($result = $connection->query($query)) {
         while ($row = $result->fetch_assoc()) {
@@ -61,11 +68,7 @@ $error = '';
               </tr>
               </tbody>
               <tfoot>
-              <td colspan="3" style="text-align:center">
-                Το περιεχόμενο της Εκπαιδευτική Κατάστασης είναι για πληροφοριακή Χρήση των Μελών του Ασφαλιστικού Ινστιτούτου Κύπρου.
-                Για οποιανδήποτε επίσημη χρήση θα πρέπει να εκδίδεται από το Ασφαλιστικό Ινστιτούτο Κύπρου.
-                <br />'.$date->format('D M d, Y G:i').'
-                </td> </tfoot>
+              </tfoot>
               </table>';
         
         $result->free();
@@ -73,6 +76,27 @@ $error = '';
     
 
  } else { ?>
-    You are not logged in. Please login <a href="index.php">here</a>
+    <h2>You are not logged in. Please login <a href="index.php">here</a></h2>
+    
 
 <?php } ?>
+
+                <div class='mt-5'>
+                Το περιεχόμενο της Εκπαιδευτική Κατάστασης είναι για πληροφοριακή Χρήση των Μελών του Ασφαλιστικού Ινστιτούτου Κύπρου.<br/>
+                Για οποιανδήποτε επίσημη χρήση θα πρέπει να εκδίδεται από το Ασφαλιστικό Ινστιτούτο Κύπρου.
+                <br />
+                <?php  
+                
+date_default_timezone_set('Europe/Athens');
+setlocale(LC_TIME, 'el_GR.UTF-8');
+echo strftime('%A ');
+$greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');
+$greekDate = date('j') . ' ' . $greekMonths[intval(date('m'))-1] . ' ' . date('Y');
+echo $greekDate;
+echo ', ';
+echo $date->format('h:i A');
+                
+                ?>
+                </div>
+
+</div>

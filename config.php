@@ -29,14 +29,24 @@ Released: 2014-11-25
 include_once('fix_mysql.inc.php');
 # see: https://stackoverflow.com/a/37877644/1069083
 
-/* Define MySQL connection details and database table name */ 
-$SETTINGS["hostname"] = 'h40lg7qyub2umdvb.cbetxkdyhwsb.us-east-1.rds.amazonaws.com';
-$SETTINGS["mysql_user"] = 'zaheai3jklgk2ltf';
-$SETTINGS["mysql_pass"] = 'cvh6rk2hcvll98hw';
-$SETTINGS["mysql_database"] = 'tsy1ng4y7q19kwvs';
-$SETTINGS["USERS"] = 'php_users_login'; // this is the default table name that we used
+
+/* Define MySQL connection details and database table name 
+.net: 
+Server=cpanel.valicom.cloud;Database=iicorg_members;Uid=iicorg_members;Pwd=23@Q07Mz&PMZ;CharacterSet=utf8mb4;
+
+jdbc: 
+jdbc:mysql://iicorg_members:23@Q07Mz&PMZ@cpanel.valicom.cloud:3306/iicorg_members?useSSL=false&zeroDateTimeBehavior=convertToNull&useOldAliasMetadataBehavior=true&allowMultiQueries=true&serverTimezone=UTC
+
+*/ 
+$SETTINGS["hostname"] = 'localhost';
+$SETTINGS["mysql_user"] = 'iicorg_members';
+$SETTINGS["mysql_pass"] = '23@Q07Mz&PMZ';
+$SETTINGS["mysql_database"] = 'iicorg_members';
 
 /* Connect to MySQL */
 $connection = mysql_connect($SETTINGS["hostname"], $SETTINGS["mysql_user"], $SETTINGS["mysql_pass"]) or die ('Unable to connect to MySQL server.<br ><br >Please make sure your MySQL login details are correct.');
 $db = mysql_select_db($SETTINGS["mysql_database"], $connection) or die ('request "Unable to select database."');
+
+mysql_query("set names 'utf8'", $connection)or die ('Unable to set  character_set_client.');
+
 ?>

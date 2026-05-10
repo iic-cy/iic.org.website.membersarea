@@ -18,7 +18,8 @@ if(isset($_POST['is_login'])){
 		mysql_query ($query, $connection ) or die ('request "Could not execute SQL query" '.$query);
 		
 		$query2 = "INSERT INTO `student_login` (login_date,login_system, student_id)VALUES(CURRENT_TIMESTAMP,1,".$user['student_id'].")";
-		mysql_query ($query2, $connection ) or die ('request "Could not execute SQL query" '.$query2);
+		
+		mysql_query ($query2, $connection ) or die ('Could not execute student_login:" '.mysql_error());
 		
 		header("Location: learningStatement.php");
  
