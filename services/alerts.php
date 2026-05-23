@@ -40,13 +40,13 @@ function fetchJsonData($url) {
 
 // Function to extract Greek date from excerpt and convert to ISO format
 function extractGreekDateFromExcerpt($excerpt) {
-    // sample: "alert_excerpt": "Ασφαλιστικό Κέντρο Τετάρτη 20 Μαϊου 2026 9:00 – 15:45"
     $greekMonths = [
         'Ιανουαρίου' => '01',
         'Φεβρουαρίου' => '02',
         'Μαρτίου' => '03',
         'Απριλίου' => '04',
         'Μαϊου' => '05',
+        'Μαΐου' => '05',
         'Μαΐου' => '05',
         'Ιουνίου' => '06',
         'Ιουλίου' => '07',
@@ -58,7 +58,9 @@ function extractGreekDateFromExcerpt($excerpt) {
     ];
     
     // Regex: captures day, Greek month name, year
-    if (preg_match('/(\d{1,2})\s+([Α-Ωα-ωάέήίόύώΐΰ]+)\s+(\d{4})/', $excerpt, $matches)) {
+    if (preg_match('/(\d\d?) (.*?) (\d\d\d\d)/u', $excerpt, $matches)) {
+        // match: [2 digits] + space + [Greek month] + space + [4 digits]
+        
         $day = str_pad($matches[1], 2, '0', STR_PAD_LEFT);
         $monthName = $matches[2];
         $year = $matches[3];
@@ -68,6 +70,8 @@ function extractGreekDateFromExcerpt($excerpt) {
         if ($month) {
             return "{$year}-{$month}-{$day}";
         }
+    } else {
+         error_log("!!no match: $excerpt");
     }
     
     return null;
@@ -110,7 +114,8 @@ function transformJsonData($jsonData) {
         }
         
         // "alert_excerpt": "Ασφαλιστικό Κέντρο Τετάρτη 20 Μαϊου 2026 9:00 – 15:45"
-
+        // ?? $result['acf']['event_date'] ?? $result['date'] ?? null,
+        
         $transformedItem = [
             'alert_id' => $result['id'] ?? null,
             'alert_image_url' => $result['yoast_head_json']['og_image'][0]['url'] ?? null,
@@ -118,7 +123,7 @@ function transformJsonData($jsonData) {
             'alert_excerpt' => $alertExcerpt,
             'alert_link_url' => $result['link'] ?? null,
             'alert_date' => $result['date'] ?? null,
-            'alert_event_date' => extractGreekDateFromExcerpt($alertExcerpt) ?? $result['acf']['event_date'] ?? $result['date'] ?? null,
+            'alert_event_date' => $result['acf']['event_date'] ?? null,
             'alert_passed' => $alertPassed
         ];
         
