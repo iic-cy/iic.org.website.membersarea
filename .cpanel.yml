@@ -1,0 +1,14 @@
+---
+# cPanel Git deployment configuration.
+# Update USERNAME to match your cPanel account name before first deploy.
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/iicorg/public_html/members-area/
+    - /usr/bin/rsync -r --delete
+        --exclude='.git'
+        --exclude='.cpanel.yml'
+        --exclude='.gitignore'
+        --exclude='CLAUDE.md'
+        --exclude='README.md'
+        --exclude='testPhp.php'
+        . $DEPLOYPATH
