@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
-
 include("servicesConfig.php");
+error_log('cronDailyNewsNotification started');
 
 function fetchJsonFromUrl($url) {
     $ch = curl_init();
@@ -322,6 +322,8 @@ try {
                 'title' => $notificationTitle,
                 'body' => $notificationBody,
                 'badge' => $badgeCount,
+                'channelId' => 'default',
+                'priority' => 'high',
                 'data' => [
                     'type' => 'news_alerts',
                     'post_ids' => $postIds,
@@ -389,6 +391,8 @@ try {
 
     error_log('cronDailyNewsNotification completed: ' . json_encode($result['data']));
     echo json_encode($result);
+    echo "\n";
+    
 } catch (Exception $e) {
     http_response_code(500);
     $result['result'] = 0;
